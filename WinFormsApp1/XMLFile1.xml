@@ -1,0 +1,23 @@
+﻿<cars>
+	<car>1</car>
+	<car>2</car>
+	<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+		<SignedInfo>
+			<CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+			<SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" />
+			<Reference URI="">
+				<Transforms>
+					<Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+				</Transforms>
+				<DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" />
+				<DigestValue>nfA1l/Xcql07dLsuPnzXhfQogOpt/cJOEz3Ja8UebM4=</DigestValue>
+			</Reference>
+		</SignedInfo>
+		<SignatureValue>4iKJUjD0w6cg7jjIZvzl2uW6uuimD9JYzfYIo0Pa4lK738wSyI7CiZYXIVjf7QpwHH4xxivprjCd6gvwZNfDtOMF5sboVMJJsTPHf0Q4gYQPFzZqdzqTnvXKnBRpWeJMETeovgIpc5C3kD9WXkzvXyOPkwfs//ZjRsqfSsnRIULBkmakYGgQ+1j5hbrx8OzBrjrSjKgeRORY0OmxrYIymHtCQ88VnvxgDzWk0AMLLHBfHNIaOX1ECQsOonqReVjiYhmD7DJbl2KAjqa2uMXZ8QXam3K99wRQ6gsJHKBMfvy5q7PKBsvYtNp1HCq5JC9r8tkVdni+ZVbl8v0iyZij0A==</SignatureValue>
+		<KeyInfo>
+			<X509Data>
+				<X509Certificate>MIID2zCCAsOgAwIBAgIUQvTjpwHpnazapVBuJ4MrRiGzwrUwDQYJKoZIhvcNAQELBQAwfTELMAkGA1UEBhMCVVMxEDAOBgNVBAgMB0Zsb3JpZGExEDAOBgNVBAcMB09ybGFuZG8xDTALBgNVBAoMBFRlc3QxDTALBgNVBAsMBFRlc3QxDTALBgNVBAMMBExvbGExHTAbBgkqhkiG9w0BCQEWDmxvbGFAZ21haWwuY29tMB4XDTIxMTEyMDE5NDMwMVoXDTIyMTEyMDE5NDMwMVowfTELMAkGA1UEBhMCVVMxEDAOBgNVBAgMB0Zsb3JpZGExEDAOBgNVBAcMB09ybGFuZG8xDTALBgNVBAoMBFRlc3QxDTALBgNVBAsMBFRlc3QxDTALBgNVBAMMBExvbGExHTAbBgkqhkiG9w0BCQEWDmxvbGFAZ21haWwuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA84MhZs/iGDP5sgV+iexBarv8ZmtTABaphr/CXPR/4w3PJwykYHm7+JmzLMxAJz7OOWiUMsJx1Wgib/Qqw/14F9Wv3q1wFwfpEoCPGZz8UUwLYLNsw8Ktqe+yP7PfcInfn0ecpIAg6cLzjVnTfeb+yMYbKgA9VeJ7y9fG+n92uJjuUch027Mf85V92q+N0SKXz1eTbFoNOn93zPchvqSj2QoGdi3F664yesuqqu1yfySgWBBMCoWTq2YJqrMQrxDujnmdKpy0RoglZLNvDdC30dbhK2mFTTKsSZW6XfkSiWSfX7RVhd4FxjD9KPQ+XHAKkdjaTNXtNlI75ATNwnSjGQIDAQABo1MwUTAdBgNVHQ4EFgQUZzPv9ZeWnmA0Dl9J/Wj/xP8qiHgwHwYDVR0jBBgwFoAUZzPv9ZeWnmA0Dl9J/Wj/xP8qiHgwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAwZMm3lpOijP0WJ0ZMHfBgJadPB+chjCfDRnVDlZx4RfjUcEv+G/4YNnC7Y2TcZIwg9HrsCeEJgndIgvO3hnCYjjno7IRVKap80+JtKYzecu/Y58TbPsAmmsEnD4YDJ4vDUrkZ4tCes5CGcJQZHpS7KbRlg0ALMKFiSSQvTvJc14Uw8HOSMAZoT4RfqMfmt3+yCuHmZNDP0OOrSvT5a8RU8X7aZk1NvxLMzv/ljXt8c1U4crIaers+Z/E8UP8k+RlQhjtyfMHD9TKBlN/O32BEnn3Gw/sStxSPPOChGgL/G8AaXxnuptmDxaGkUXKyJ1t3P5vIu1F7mnhz4Eodm+DPw==</X509Certificate>
+			</X509Data>
+		</KeyInfo>
+	</Signature>
+</cars>
