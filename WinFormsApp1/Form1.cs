@@ -862,7 +862,7 @@ namespace WinFormsApp1
             var date = DateTime.Now; //DateTime.Now.AddHours(1);
             var dateStr = Siat.GetDateCufFormat(date);
             dateStr = textBox12.Text;
-            dateStr = "20190113163721231"; //test
+            //dateStr = "20190113163721231"; //test
             var tipoFacturaDocumento = byte.Parse(textBox9.Text);
             var codigoModalidad = byte.Parse(textBox6.Text);
             var codigoEmision = byte.Parse(textBox7.Text);
