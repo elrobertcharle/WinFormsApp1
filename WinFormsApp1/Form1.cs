@@ -857,7 +857,7 @@ namespace WinFormsApp1
 
         }
 
-        private async void button13_Click(object sender, EventArgs e)
+        private async void GenerateCufButton_Click(object sender, EventArgs e)
         {
             var siat = new Siat();
             var date = DateTime.Now; //DateTime.Now.AddHours(1);
@@ -883,7 +883,7 @@ namespace WinFormsApp1
             CufdTextBox.Text = cufCufd.Cufd;
         }
 
-        private async void button14_Click(object sender, EventArgs e)
+        private async void SetCufCufdDateToXmlButton_Click(object sender, EventArgs e)
         {
             openFileDialog1.Filter = "XML|*.xml";
             if (openFileDialog1.ShowDialog() == DialogResult.OK /*&& saveFileDialog1.ShowDialog() == DialogResult.OK*/)

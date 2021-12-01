@@ -47,7 +47,7 @@ namespace WinFormsApp1
             this.button12 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button13 = new System.Windows.Forms.Button();
+            this.GenerateCufButton = new System.Windows.Forms.Button();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -65,7 +65,7 @@ namespace WinFormsApp1
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.textBox11 = new System.Windows.Forms.TextBox();
-            this.button14 = new System.Windows.Forms.Button();
+            this.SetCufCufdDateToXmlButton = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.textBox12 = new System.Windows.Forms.TextBox();
             this.textBox13 = new System.Windows.Forms.TextBox();
@@ -244,15 +244,15 @@ namespace WinFormsApp1
             this.textBox2.Size = new System.Drawing.Size(100, 23);
             this.textBox2.TabIndex = 15;
             // 
-            // button13
+            // GenerateCufButton
             // 
-            this.button13.Location = new System.Drawing.Point(450, 830);
-            this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(135, 23);
-            this.button13.TabIndex = 16;
-            this.button13.Text = "Generate CUF";
-            this.button13.UseVisualStyleBackColor = true;
-            this.button13.Click += new System.EventHandler(this.button13_Click);
+            this.GenerateCufButton.Location = new System.Drawing.Point(450, 830);
+            this.GenerateCufButton.Name = "GenerateCufButton";
+            this.GenerateCufButton.Size = new System.Drawing.Size(135, 23);
+            this.GenerateCufButton.TabIndex = 16;
+            this.GenerateCufButton.Text = "Generate CUF";
+            this.GenerateCufButton.UseVisualStyleBackColor = true;
+            this.GenerateCufButton.Click += new System.EventHandler(this.GenerateCufButton_Click);
             // 
             // textBox3
             // 
@@ -398,15 +398,15 @@ namespace WinFormsApp1
             this.textBox11.TabIndex = 32;
             this.textBox11.Text = "0";
             // 
-            // button14
+            // SetCufCufdDateToXmlButton
             // 
-            this.button14.Location = new System.Drawing.Point(440, 474);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(317, 23);
-            this.button14.TabIndex = 34;
-            this.button14.Text = "Set CUF and CUFD and Date";
-            this.button14.UseVisualStyleBackColor = true;
-            this.button14.Click += new System.EventHandler(this.button14_Click);
+            this.SetCufCufdDateToXmlButton.Location = new System.Drawing.Point(440, 474);
+            this.SetCufCufdDateToXmlButton.Name = "SetCufCufdDateToXmlButton";
+            this.SetCufCufdDateToXmlButton.Size = new System.Drawing.Size(317, 23);
+            this.SetCufCufdDateToXmlButton.TabIndex = 34;
+            this.SetCufCufdDateToXmlButton.Text = "Set CUF and CUFD and Date";
+            this.SetCufCufdDateToXmlButton.UseVisualStyleBackColor = true;
+            this.SetCufCufdDateToXmlButton.Click += new System.EventHandler(this.SetCufCufdDateToXmlButton_Click);
             // 
             // label10
             // 
@@ -554,7 +554,7 @@ namespace WinFormsApp1
             this.Controls.Add(this.textBox13);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.textBox12);
-            this.Controls.Add(this.button14);
+            this.Controls.Add(this.SetCufCufdDateToXmlButton);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textBox11);
             this.Controls.Add(this.label8);
@@ -572,7 +572,7 @@ namespace WinFormsApp1
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.button13);
+            this.Controls.Add(this.GenerateCufButton);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button12);
@@ -620,7 +620,7 @@ namespace WinFormsApp1
         private System.Windows.Forms.Button button12;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.Button GenerateCufButton;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label2;
@@ -638,7 +638,7 @@ namespace WinFormsApp1
         private System.Windows.Forms.TextBox textBox10;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBox11;
-        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button SetCufCufdDateToXmlButton;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox12;
         private System.Windows.Forms.TextBox textBox13;
