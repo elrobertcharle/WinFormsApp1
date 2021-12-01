@@ -44,7 +44,8 @@ namespace WinFormsApp1
         private async void button1_Click(object sender, EventArgs e)
         {
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml("<root><a t=\"1\" a=\"1\" /></root>");
+            //doc.LoadXml("<root><a t=\"1\" a=\"1\" /></root>");
+            doc.Load(@"D:\Del\facturaElectronicaCompraVenta.xml");
             var child = doc.DocumentElement.ChildNodes[0];
             //child.InnerText = "xxxxx";
 
@@ -55,7 +56,7 @@ namespace WinFormsApp1
 
 
             var c2 = new Siat();
-            var canonicalizeDoc = c2.CanonicalizeXml(doc);
+            var canonicalizeDoc = c2.CanonicalizeXml2(doc);
             //canonicalizeDoc.PreserveWhitespace = true;
             //RemoveWhiteSpaceContent(canonicalizeDoc.DocumentElement);
 
@@ -351,29 +352,25 @@ namespace WinFormsApp1
 
             var c2 = new ServiceReference2.ServicioFacturacionCodigosClient();
 
-            var cufCud = await GetCufAndCufd(numeroFactura, Siat.GetDateCufFormat(DateTime.Now), codigoDocumentoSector, tipoFacturaDocumento, codigoEmision, codigoModalidad, codigoPuntoVenta, codigoSistema, codigoSucursal, cuis, nit, codigoAmbiente);
-
             var doc = new XmlDocument();
             doc.Load(@"D:\Del\facturaElectronicaCompraVenta.xml");
 
             var p = new ServiceReference1.solicitudRecepcionFactura
             {
                 archivo = compressedBytes,
-                cuis = "31629D89",
+                cuis = cuis,
                 fechaEnvio = DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm:ss.fff"),
                 codigoSucursal = codigoSucursal,
                 codigoAmbiente = codigoAmbiente,
                 codigoSistema = codigoSistema,
                 codigoPuntoVenta = codigoPuntoVenta,
-                //cufd = "QUHCoUM8ckJCQQ==MjdGMDA3ODhFRTc=QsKha2ZuVmVMVlVBNkQwQTYxOEU2QjE3",  //ok
-                //cufd = "BQcKhQzxyQkJBNkjdGMDA3ODhFRTc=QkEjbEtNYktWVUFQwQTYxOEU2QjE3M",
                 cufd = GetCufdFromXml(doc),
-                nit = 1014381027,
-                codigoEmision = 1,
-                tipoFacturaDocumento = 1,
+                nit = nit,
+                codigoEmision = codigoEmision,
+                tipoFacturaDocumento = tipoFacturaDocumento,
 
-                codigoDocumentoSector = 1,
-                codigoModalidad = 1,
+                codigoDocumentoSector = codigoDocumentoSector,
+                codigoModalidad = codigoModalidad,
                 codigoPuntoVentaSpecified = true,
                 hashArchivo = ByteArrayToHexString(hash),
             };
@@ -662,7 +659,7 @@ namespace WinFormsApp1
             rsaPKCS8.ImportFromPem(File.ReadAllText(privateKeyFileNamePKCS8).ToCharArray());
 
             var signedFileName = @"d:\del\facturaElectronicaCompraVentaSigned.xml";
-            //var canonicalizedName = @"d:\del\cognosxmlCanonicalized.xml";
+            var canonicalizedName = @"d:\del\facturaElectronicaCompraVentaCanonicalized.xml";
             var compressedFileName = @"d:\del\facturaElectronicaCompraVenta.xml.gz";
 
             var c2 = new Siat();
@@ -671,7 +668,11 @@ namespace WinFormsApp1
             //doc.PreserveWhitespace = true;
             doc.Load(@"D:\Del\facturaElectronicaCompraVenta.xml");
 
-            doc = c2.CanonicalizeXml(doc);
+            var canonicalizedStream = c2.CanonicalizeXml2(doc);
+
+
+            doc = new XmlDocument();
+            doc.Load(canonicalizedStream);
 
             c2.SingXml(doc, rsaPKCS8, certificate);
 
@@ -887,11 +888,13 @@ namespace WinFormsApp1
             openFileDialog1.Filter = "XML|*.xml";
             if (openFileDialog1.ShowDialog() == DialogResult.OK /*&& saveFileDialog1.ShowDialog() == DialogResult.OK*/)
             {
-                var cufCufd = await GetCufAndCufd(numeroFactura, Siat.GetDateCufFormat(DateTime.Now), codigoDocumentoSector, tipoFacturaDocumento, codigoEmision, codigoModalidad, codigoPuntoVenta, codigoSistema, codigoSucursal, cuis, nit, codigoAmbiente);
+                var date = DateTime.Now.AddHours(1);
+                var cufCufd = await GetCufAndCufd(numeroFactura, Siat.GetDateCufFormat(date), codigoDocumentoSector, tipoFacturaDocumento, codigoEmision, codigoModalidad, codigoPuntoVenta, codigoSistema, codigoSucursal, cuis, nit, codigoAmbiente);
                 var doc = new XmlDocument();
                 doc.Load(openFileDialog1.FileName);
                 doc.GetElementsByTagName("cuf")[0].InnerText = cufCufd.Cuf;
                 doc.GetElementsByTagName("cufd")[0].InnerText = cufCufd.Cufd;
+                doc.GetElementsByTagName("fechaEmision")[0].InnerText = date.ToString("s") + ".000";
                 doc.Save(openFileDialog1.FileName);
             }
         }

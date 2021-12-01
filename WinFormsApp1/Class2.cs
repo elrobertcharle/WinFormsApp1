@@ -115,15 +115,60 @@ namespace WinFormsApp1
             }
         }
 
+        public MemoryStream CanonicalizeXml2(XmlDocument doc)
+        {
+            XmlDsigC14NTransform c = new XmlDsigC14NTransform();
+            c.LoadInput(doc);
+            return (MemoryStream)c.GetOutput(typeof(MemoryStream));
+        }
+
+        public string ByteArrayToString(byte[] ba)
+        {
+            StringBuilder hex = new StringBuilder(ba.Length * 2);
+            foreach (byte b in ba)
+                hex.AppendFormat(" {0:x2}", b);
+            return hex.ToString();
+        }
+
+        public static string ByteArrayToHexString(byte[] ba)
+        {
+            var hex = new StringBuilder(ba.Length * 2);
+            foreach (byte b in ba)
+                hex.AppendFormat(" {0:x2}", b);
+            return hex.ToString();
+        }
+
         public static void SaveXml(XmlDocument doc, string fileName)
         {
-            doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
-            XmlWriterSettings settings = new XmlWriterSettings { Indent = true, Encoding = Encoding.UTF8 };
-            using (XmlWriter writer = XmlWriter.Create(fileName, settings))
+            using (var fs = File.Create(fileName))
             {
-                writer.WriteStartDocument(true);
-                doc.Save(writer);
+                var bom = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
+                var bytes = System.Text.Encoding.UTF8.GetBytes(bom);
+                fs.Write(bytes, 0, bytes.Length);
+
+                bytes = new byte[] { 0xA };
+                fs.Write(bytes, 0, bytes.Length);
+                
+                bytes = System.Text.Encoding.UTF8.GetBytes(doc.DocumentElement.OuterXml);
+                fs.Write(bytes, 0, bytes.Length);
+
+
+                //var s = ByteArrayToHexString(bytes);
             }
+
+            //doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
+            //XmlWriterSettings settings = new XmlWriterSettings
+            //{
+            //    Indent = true,
+            //    CheckCharacters = false,
+            //    NewLineHandling = NewLineHandling.None,
+            //    Encoding = Encoding.UTF8
+            //};
+            //using (XmlWriter writer = XmlWriter.Create(fileName, settings))
+            //{
+            //    writer.WriteStartDocument(true);
+            //    doc.Save(writer);
+            //}
         }
 
         public static void RemoveBOM(string source)

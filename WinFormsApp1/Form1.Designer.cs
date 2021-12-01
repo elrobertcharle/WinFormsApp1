@@ -34,7 +34,7 @@ namespace WinFormsApp1
             this.button2 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.SignAndCompressButton = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -133,15 +133,15 @@ namespace WinFormsApp1
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // button4
+            // SignAndCompressButton
             // 
-            this.button4.Location = new System.Drawing.Point(440, 335);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(155, 23);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "Sign and Compress";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.SignAndCompressButton.Location = new System.Drawing.Point(440, 335);
+            this.SignAndCompressButton.Name = "SignAndCompressButton";
+            this.SignAndCompressButton.Size = new System.Drawing.Size(155, 23);
+            this.SignAndCompressButton.TabIndex = 5;
+            this.SignAndCompressButton.Text = "Sign and Compress";
+            this.SignAndCompressButton.UseVisualStyleBackColor = true;
+            this.SignAndCompressButton.Click += new System.EventHandler(this.button4_Click);
             // 
             // button5
             // 
@@ -402,9 +402,9 @@ namespace WinFormsApp1
             // 
             this.button14.Location = new System.Drawing.Point(440, 474);
             this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(155, 23);
+            this.button14.Size = new System.Drawing.Size(317, 23);
             this.button14.TabIndex = 34;
-            this.button14.Text = "Set CUF and CUFD";
+            this.button14.Text = "Set CUF and CUFD and Date";
             this.button14.UseVisualStyleBackColor = true;
             this.button14.Click += new System.EventHandler(this.button14_Click);
             // 
@@ -583,7 +583,7 @@ namespace WinFormsApp1
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.SignAndCompressButton);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button2);
@@ -607,7 +607,7 @@ namespace WinFormsApp1
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button SignAndCompressButton;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
