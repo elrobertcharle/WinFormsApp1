@@ -647,7 +647,7 @@ namespace WinFormsApp1
             return count;
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void SignAndCompressButton_Click(object sender, EventArgs e)
         {
             var certificate = new X509Certificate2(@"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\CR.pem");
 
@@ -912,7 +912,7 @@ namespace WinFormsApp1
         private void Form1_Load(object sender, EventArgs e)
         {
             textBox12.Text = Siat.GetDateCufFormat(DateTime.Now);
-        }
+        }            
     }
 
     public enum PemStringType

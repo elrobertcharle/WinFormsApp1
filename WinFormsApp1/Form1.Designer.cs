@@ -141,7 +141,7 @@ namespace WinFormsApp1
             this.SignAndCompressButton.TabIndex = 5;
             this.SignAndCompressButton.Text = "Sign and Compress";
             this.SignAndCompressButton.UseVisualStyleBackColor = true;
-            this.SignAndCompressButton.Click += new System.EventHandler(this.button4_Click);
+            this.SignAndCompressButton.Click += new System.EventHandler(this.SignAndCompressButton_Click);
             // 
             // button5
             // 
