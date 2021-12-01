@@ -160,7 +160,7 @@ namespace WinFormsApp1
             if (remainder == 0)
                 return sum + "0";
             if (remainder == 1)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Invalid Modulus11.");
             return n + (11 - remainder).ToString();
         }
 
@@ -196,7 +196,7 @@ namespace WinFormsApp1
 
             if (date.Length != 17)
                 throw new InvalidOperationException("Invalid date format.");
-           
+
             var x = nit.PadLeft(13, '0')
                 + date
                 + sucursal.PadLeft(4, '0')
@@ -231,7 +231,7 @@ namespace WinFormsApp1
             cadena += numeroFactura.ToString("D10");
             cadena += puntoVenta.ToString("D4");
 
-            cadena= AddModulus11(cadena);
+            cadena = AddModulus11(cadena);
 
             var cuf = System.Numerics.BigInteger.Parse(cadena);
             return cuf.ToString("X");

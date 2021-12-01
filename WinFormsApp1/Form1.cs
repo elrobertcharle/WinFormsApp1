@@ -352,33 +352,6 @@ namespace WinFormsApp1
             var c2 = new ServiceReference2.ServicioFacturacionCodigosClient();
 
             var cufCud = await GetCufAndCufd(numeroFactura, Siat.GetDateCufFormat(DateTime.Now), codigoDocumentoSector, tipoFacturaDocumento, codigoEmision, codigoModalidad, codigoPuntoVenta, codigoSistema, codigoSucursal, cuis, nit, codigoAmbiente);
-            //using (new OperationContextScope(c2.InnerChannel))
-            //{
-            //    var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDb2dub3NzeXMiLCJjb2RpZ29TaXN0ZW1hIjoiNkQwQTYxOEU2QjE3MjdGMDA3ODhFRTciLCJuaXQiOiJINHNJQUFBQUFBQUFBRE0wTURReHRqQTBNRElIQUc2ZVQzVUtBQUFBIiwiaWQiOjQ2ODM1MiwiZXhwIjoxNjY0MzIzMjAwLCJpYXQiOjE2MzI4MzUwNTksIm5pdERlbGVnYWRvIjoxMDE0MzgxMDI3LCJzdWJzaXN0ZW1hIjoiU0ZFIn0.mX5V1nGeH5sCDavLOiJrTeEr6r6v7q6iZsoYYoCijjuJy0GQ9xp74QbD7D7P0RgI0gQ_h9AG90u6wubmQAW-VA";
-            //    HttpRequestMessageProperty requestMessage = new HttpRequestMessageProperty();
-            //    requestMessage.Headers["apikey"] = "TokenApi " + token;
-            //    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = requestMessage;
-
-            //    var cufdResult = await c2.cufdAsync(new ServiceReference2.solicitudCufd
-            //    {
-            //        nit = nit,
-            //        codigoAmbiente = codigoAmbiente,
-            //        codigoModalidad = codigoModalidad,
-            //        codigoPuntoVenta = codigoPuntoVenta,
-            //        codigoPuntoVentaSpecified = true,
-            //        codigoSistema = codigoSistema,
-            //        codigoSucursal = codigoSucursal,
-            //        cuis = cuis
-            //    });
-
-            //    var siat = new Siat();
-
-            //    var cufp1 = siat.GetCUF(nit.ToString(), DateTime.UtcNow, codigoSucursal.ToString(), codigoModalidad, codigoEmision, tipoFacturaDocumento, codigoDocumentoSector, numeroFactura, codigoPuntoVenta.ToString());
-            //    var codigoControl = cufdResult.RespuestaCufd.codigoControl;
-            //    cufd = cufdResult.RespuestaCufd.codigo;
-            //    cuf = cufp1 + codigoControl;
-            //}
-
 
             var doc = new XmlDocument();
             doc.Load(@"D:\Del\facturaElectronicaCompraVenta.xml");
