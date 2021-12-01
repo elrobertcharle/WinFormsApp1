@@ -12,7 +12,7 @@ using System.Xml;
 
 namespace WinFormsApp1
 {
-    class Class2
+    class Siat
     {
         //public void SignData(RSA rsa)
         //{
@@ -53,7 +53,7 @@ namespace WinFormsApp1
             var reference = new Reference();
             reference.Uri = "";
             reference.AddTransform(new XmlDsigEnvelopedSignatureTransform());
-            reference.AddTransform(new XmlDsigC14NTransform());
+            reference.AddTransform(new XmlDsigC14NWithCommentsTransform());
             signedXml.AddReference(reference);
 
             var keyInfo = new KeyInfo();
@@ -142,6 +142,99 @@ namespace WinFormsApp1
                         target.Write(buff, 0, read);
                 }
             }
+        }
+
+        public string AddModulus11(string n)
+        {
+            var factor = 2;
+            var sum = 0;
+            for (var i = n.Length - 1; i >= 0; i--)
+            {
+                var d = int.Parse(n[i].ToString());
+                sum += d * factor++;
+                if (factor == 8)
+                    factor = 2;
+            }
+
+            var remainder = sum % 11;
+            if (remainder == 0)
+                return sum + "0";
+            if (remainder == 1)
+                throw new InvalidOperationException();
+            return n + (11 - remainder).ToString();
+        }
+
+
+        public string GetCUF(string nit, string date, string sucursal, byte modalidad, byte tipoEmision, byte tipoFactura, byte tipoDocumentoSector, string numeroFactura, string puntoVenta)
+        {
+            if (string.IsNullOrEmpty(sucursal))
+                throw new ArgumentException("Invalid argument value.", nameof(sucursal));
+            if (sucursal.Length > 4)
+                throw new ArgumentException("Invalid argument value.", nameof(sucursal));
+            if (!int.TryParse(sucursal, out _))
+                throw new ArgumentException("Invalid argument value.", nameof(sucursal));
+            if (modalidad > 3)
+                throw new ArgumentException("Invalid argument value.", nameof(modalidad));
+            if (tipoEmision > 3)
+                throw new ArgumentException("Invalid argument value.", nameof(tipoEmision));
+            if (tipoFactura > 3)
+                throw new ArgumentException("Invalid argument value.", nameof(tipoFactura));
+            if (tipoDocumentoSector > 24)
+                throw new ArgumentException("Invalid argument value.", nameof(tipoDocumentoSector));
+            if (string.IsNullOrEmpty(numeroFactura))
+                throw new ArgumentException("Invalid argument value.", nameof(numeroFactura));
+            if (numeroFactura.Length > 10)
+                throw new ArgumentException("Invalid argument value.", nameof(numeroFactura));
+            if (!int.TryParse(numeroFactura, out _))
+                throw new ArgumentException("Invalid argument value.", nameof(numeroFactura));
+            if (string.IsNullOrEmpty(puntoVenta))
+                throw new ArgumentException("Invalid argument value.", nameof(puntoVenta));
+            if (puntoVenta.Length > 4)
+                throw new ArgumentException("Invalid argument value.", nameof(puntoVenta));
+            if (!int.TryParse(puntoVenta, out _))
+                throw new ArgumentException("Invalid argument value.", nameof(puntoVenta));
+
+            if (date.Length != 17)
+                throw new InvalidOperationException("Invalid date format.");
+           
+            var x = nit.PadLeft(13, '0')
+                + date
+                + sucursal.PadLeft(4, '0')
+                + modalidad.ToString()
+                + tipoEmision.ToString()
+                + tipoFactura.ToString()
+                + tipoDocumentoSector.ToString().PadLeft(2, '0')
+                + numeroFactura.PadLeft(10, '0')
+                + puntoVenta.PadLeft(4, '0');
+            x = AddModulus11(x);
+            var bi = System.Numerics.BigInteger.Parse(x);
+            return bi.ToString("X");
+        }
+
+        public static string GetDateCufFormat(DateTime date)
+        {
+            return date.ToString("yyyyMMddHHmmssfff");
+        }
+
+        public string GetCUFIvan(string nit, string fecha, int sucursal, int modalidad, int temision, int tipoFactura, int tipoDocumentoSector, int numeroFactura, int puntoVenta)
+        {
+            var cadena = System.Numerics.BigInteger.Parse(nit).ToString("D13");
+            if (fecha.Length < 17)
+                cadena += fecha + int.Parse("0").ToString("D" + (17 - fecha.Length));
+            else
+                cadena += fecha;
+            cadena += sucursal.ToString("D4");
+            cadena += modalidad;
+            cadena += temision;
+            cadena += tipoFactura;
+            cadena += tipoDocumentoSector.ToString("D2");
+            cadena += numeroFactura.ToString("D10");
+            cadena += puntoVenta.ToString("D4");
+
+            cadena= AddModulus11(cadena);
+
+            var cuf = System.Numerics.BigInteger.Parse(cadena);
+            return cuf.ToString("X");
         }
 
         //public Stream CanonicalizeXmlStream(XmlDocument doc)

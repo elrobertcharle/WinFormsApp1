@@ -10,6 +10,8 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,8 +28,6 @@ namespace WinFormsApp1
             InitializeComponent();
 
         }
-
-        int x = 0;
 
         private void RemoveWhiteSpaceContent(XmlElement e)
         {
@@ -54,7 +54,7 @@ namespace WinFormsApp1
             //doc.Save(@"d:\del\xxx.txt");
 
 
-            var c2 = new Class2();
+            var c2 = new Siat();
             var canonicalizeDoc = c2.CanonicalizeXml(doc);
             //canonicalizeDoc.PreserveWhitespace = true;
             //RemoveWhiteSpaceContent(canonicalizeDoc.DocumentElement);
@@ -234,6 +234,9 @@ namespace WinFormsApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
+
+            var c = new Siat();
+            label1.Text = c.AddModulus11(textBox2.Text);
             //XmlDocument doc = new XmlDocument();
             //var root = doc.CreateElement("cars");
             //doc.AppendChild(root);
@@ -290,6 +293,53 @@ namespace WinFormsApp1
 
         }
 
+        private async Task<CufCudResult> GetCufAndCufd(string numeroFactura, string date, byte codigoDocumentoSector, byte tipoFacturaDocumento, byte codigoEmision, byte codigoModalidad, int codigoPuntoVenta, string codigoSistema, int codigoSucursal, string cuis, long nit, int codigoAmbiente)
+        {
+            var c2 = new ServiceReference2.ServicioFacturacionCodigosClient();
+            using (new OperationContextScope(c2.InnerChannel))
+            {
+                var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDb2dub3NzeXMiLCJjb2RpZ29TaXN0ZW1hIjoiNkQwQTYxOEU2QjE3MjdGMDA3ODhFRTciLCJuaXQiOiJINHNJQUFBQUFBQUFBRE0wTURReHRqQTBNRElIQUc2ZVQzVUtBQUFBIiwiaWQiOjQ2ODM1MiwiZXhwIjoxNjY0MzIzMjAwLCJpYXQiOjE2MzI4MzUwNTksIm5pdERlbGVnYWRvIjoxMDE0MzgxMDI3LCJzdWJzaXN0ZW1hIjoiU0ZFIn0.mX5V1nGeH5sCDavLOiJrTeEr6r6v7q6iZsoYYoCijjuJy0GQ9xp74QbD7D7P0RgI0gQ_h9AG90u6wubmQAW-VA";
+                HttpRequestMessageProperty requestMessage = new HttpRequestMessageProperty();
+                requestMessage.Headers["apikey"] = "TokenApi " + token;
+                OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = requestMessage;
+
+                var cufdResult = await c2.cufdAsync(new ServiceReference2.solicitudCufd
+                {
+                    nit = nit,
+                    codigoAmbiente = codigoAmbiente,
+                    codigoModalidad = codigoModalidad,
+                    codigoPuntoVenta = codigoPuntoVenta,
+                    codigoPuntoVentaSpecified = true,
+                    codigoSistema = codigoSistema,
+                    codigoSucursal = codigoSucursal,
+                    cuis = cuis
+                });
+
+                var siat = new Siat();
+                var cufp1 = siat.GetCUF(nit.ToString(), date, codigoSucursal.ToString(), codigoModalidad, codigoEmision, tipoFacturaDocumento, codigoDocumentoSector, numeroFactura, codigoPuntoVenta.ToString());
+                //var cufp1 = siat.GetCUFIvan(nit.ToString(), boliviaDateTimeStr, codigoSucursal, codigoModalidad, codigoEmision, tipoFacturaDocumento, codigoDocumentoSector, int.Parse(numeroFactura), codigoPuntoVenta);
+                var codigoControl = cufdResult.RespuestaCufd.codigoControl;
+
+                return new CufCudResult
+                {
+                    Cufd = cufdResult.RespuestaCufd.codigo,
+                    Cuf = cufp1 + codigoControl
+                };
+            }
+        }
+
+        long nit = 1014381027;
+        int codigoAmbiente = 2;
+        byte codigoModalidad = 1;
+        int codigoPuntoVenta = 0;
+        string codigoSistema = "6D0A618E6B1727F00788EE7";
+        string cuis = "31629D89";
+        byte codigoEmision = 1;
+        byte tipoFacturaDocumento = 1;
+        byte codigoDocumentoSector = 1;
+        string numeroFactura = "12345";
+        int codigoSucursal = 0;
+
         private async void button3_Click(object sender, EventArgs e)
         {
             var compressedFileName = @"D:\Del\facturaElectronicaCompraVenta.xml.gz";
@@ -297,18 +347,54 @@ namespace WinFormsApp1
             var hash = SHA256.Create().ComputeHash(compressedBytes);
 
             var c = new ServiceReference1.ServicioFacturacionClient();
-            //c.e
+
+
+            var c2 = new ServiceReference2.ServicioFacturacionCodigosClient();
+
+            var cufCud = await GetCufAndCufd(numeroFactura, Siat.GetDateCufFormat(DateTime.Now), codigoDocumentoSector, tipoFacturaDocumento, codigoEmision, codigoModalidad, codigoPuntoVenta, codigoSistema, codigoSucursal, cuis, nit, codigoAmbiente);
+            //using (new OperationContextScope(c2.InnerChannel))
+            //{
+            //    var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJDb2dub3NzeXMiLCJjb2RpZ29TaXN0ZW1hIjoiNkQwQTYxOEU2QjE3MjdGMDA3ODhFRTciLCJuaXQiOiJINHNJQUFBQUFBQUFBRE0wTURReHRqQTBNRElIQUc2ZVQzVUtBQUFBIiwiaWQiOjQ2ODM1MiwiZXhwIjoxNjY0MzIzMjAwLCJpYXQiOjE2MzI4MzUwNTksIm5pdERlbGVnYWRvIjoxMDE0MzgxMDI3LCJzdWJzaXN0ZW1hIjoiU0ZFIn0.mX5V1nGeH5sCDavLOiJrTeEr6r6v7q6iZsoYYoCijjuJy0GQ9xp74QbD7D7P0RgI0gQ_h9AG90u6wubmQAW-VA";
+            //    HttpRequestMessageProperty requestMessage = new HttpRequestMessageProperty();
+            //    requestMessage.Headers["apikey"] = "TokenApi " + token;
+            //    OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = requestMessage;
+
+            //    var cufdResult = await c2.cufdAsync(new ServiceReference2.solicitudCufd
+            //    {
+            //        nit = nit,
+            //        codigoAmbiente = codigoAmbiente,
+            //        codigoModalidad = codigoModalidad,
+            //        codigoPuntoVenta = codigoPuntoVenta,
+            //        codigoPuntoVentaSpecified = true,
+            //        codigoSistema = codigoSistema,
+            //        codigoSucursal = codigoSucursal,
+            //        cuis = cuis
+            //    });
+
+            //    var siat = new Siat();
+
+            //    var cufp1 = siat.GetCUF(nit.ToString(), DateTime.UtcNow, codigoSucursal.ToString(), codigoModalidad, codigoEmision, tipoFacturaDocumento, codigoDocumentoSector, numeroFactura, codigoPuntoVenta.ToString());
+            //    var codigoControl = cufdResult.RespuestaCufd.codigoControl;
+            //    cufd = cufdResult.RespuestaCufd.codigo;
+            //    cuf = cufp1 + codigoControl;
+            //}
+
+
+            var doc = new XmlDocument();
+            doc.Load(@"D:\Del\facturaElectronicaCompraVenta.xml");
+
             var p = new ServiceReference1.solicitudRecepcionFactura
             {
                 archivo = compressedBytes,
                 cuis = "31629D89",
                 fechaEnvio = DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm:ss.fff"),
-                codigoSucursal = 0,
-                codigoAmbiente = 2,
-                codigoSistema = "6D0A618E6B1727F00788EE7",
-                codigoPuntoVenta = 0,
-                //cufd = "BQcKhQzxyQkJBNkjdGMDA3ODhFRTc=QjlEZ2lMVUxWVUFQwQTYxOEU2QjE3M",
-                cufd = "QUHCoUM8ckJCQQ==MjdGMDA3ODhFRTc=QsKha2ZuVmVMVlVBNkQwQTYxOEU2QjE3",
+                codigoSucursal = codigoSucursal,
+                codigoAmbiente = codigoAmbiente,
+                codigoSistema = codigoSistema,
+                codigoPuntoVenta = codigoPuntoVenta,
+                //cufd = "QUHCoUM8ckJCQQ==MjdGMDA3ODhFRTc=QsKha2ZuVmVMVlVBNkQwQTYxOEU2QjE3",  //ok
+                //cufd = "BQcKhQzxyQkJBNkjdGMDA3ODhFRTc=QkEjbEtNYktWVUFQwQTYxOEU2QjE3M",
+                cufd = GetCufdFromXml(doc),
                 nit = 1014381027,
                 codigoEmision = 1,
                 tipoFacturaDocumento = 1,
@@ -364,8 +450,6 @@ namespace WinFormsApp1
 
         private void SignData()
         {
-
-
             var cert = new X509Certificate2(System.IO.File.ReadAllBytes(@"C:\Users\elrob\Desktop\BoliviaImpuestos\MyCert\cert.pfx"), "12345");
             var publicKey = new X509Certificate2(@"C:\Users\elrob\Desktop\BoliviaImpuestos\MyCert\my-cert.pem");
 
@@ -604,11 +688,11 @@ namespace WinFormsApp1
             var rsaPKCS8 = RSA.Create();
             rsaPKCS8.ImportFromPem(File.ReadAllText(privateKeyFileNamePKCS8).ToCharArray());
 
-            var signedFileName = @"d:\del\cognosxml.xml";
-            var canonicalizedName = @"d:\del\cognosxmlCanonicalized.xml";
+            var signedFileName = @"d:\del\facturaElectronicaCompraVentaSigned.xml";
+            //var canonicalizedName = @"d:\del\cognosxmlCanonicalized.xml";
             var compressedFileName = @"d:\del\facturaElectronicaCompraVenta.xml.gz";
 
-            var c2 = new Class2();
+            var c2 = new Siat();
 
             var doc = new XmlDocument();
             //doc.PreserveWhitespace = true;
@@ -618,7 +702,7 @@ namespace WinFormsApp1
 
             c2.SingXml(doc, rsaPKCS8, certificate);
 
-            Class2.SaveXml(doc, signedFileName);
+            Siat.SaveXml(doc, signedFileName);
 
             //using (var writer = XmlWriter.Create(signedFileName, new XmlWriterSettings { /*Indent = true*/ Encoding = Encoding.UTF8 }))
             //    doc.Save(writer);
@@ -642,7 +726,7 @@ namespace WinFormsApp1
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                var c2 = new Class2();
+                var c2 = new Siat();
                 var doc = new XmlDocument();
                 doc.Load(openFileDialog1.FileName);
                 var ok = c2.VerifyXmlSig(doc);
@@ -671,7 +755,7 @@ namespace WinFormsApp1
             {
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    var c2 = new Class2();
+                    var c2 = new Siat();
                     c2.CompressFile(openFileDialog1.FileName, saveFileDialog1.FileName);
                 }
             }
@@ -695,14 +779,14 @@ namespace WinFormsApp1
                 rsaV8.ImportFromPem(File.ReadAllText(privateKeyFileNameV8).ToCharArray());
 
 
-                var c2 = new Class2();
+                var c2 = new Siat();
 
                 var doc = new XmlDocument();
                 //doc.PreserveWhitespace = true;
                 doc.Load(openFileDialog1.FileName);
                 c2.SingXml(doc, rsaV8, certificate);
 
-                Class2.SaveXml(doc, saveFileDialog1.FileName);
+                Siat.SaveXml(doc, saveFileDialog1.FileName);
             }
         }
 
@@ -720,13 +804,13 @@ namespace WinFormsApp1
                 rsaPKCS8.ImportFromPem(File.ReadAllText(privateKeyFileNamePKCS8).ToCharArray());
 
 
-                var c2 = new Class2();
+                var c2 = new Siat();
 
                 var doc = new XmlDocument();
                 doc.Load(openFileDialog1.FileName);
                 c2.SingXml(doc, rsaPKCS8, certificate);
 
-                Class2.SaveXml(doc, saveFileDialog1.FileName);
+                Siat.SaveXml(doc, saveFileDialog1.FileName);
                 //doc.Save(saveFileDialog1.FileName);
 
                 //using (var writer = XmlWriter.Create(saveFileDialog1.FileName, new XmlWriterSettings { /*Indent = true*/ Encoding = Encoding.UTF8 }))
@@ -739,7 +823,7 @@ namespace WinFormsApp1
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                var c2 = new Class2();
+                var c2 = new Siat();
 
                 var doc = new XmlDocument();
                 doc.Load(openFileDialog1.FileName);
@@ -763,7 +847,7 @@ namespace WinFormsApp1
         private void button11_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                Class2.RemoveBOM(openFileDialog1.FileName);
+                Siat.RemoveBOM(openFileDialog1.FileName);
         }
 
         bool _XmlSchemeError;
@@ -792,6 +876,66 @@ namespace WinFormsApp1
             {
                 if (type == XmlSeverityType.Error) throw new Exception(e.Message);
             }
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void button13_Click(object sender, EventArgs e)
+        {
+            var siat = new Siat();
+            var date = DateTime.Now; //DateTime.Now.AddHours(1);
+            var dateStr = Siat.GetDateCufFormat(date);
+            dateStr = textBox12.Text;
+            dateStr = "20190113163721231"; //test
+            var tipoFacturaDocumento = byte.Parse(textBox9.Text);
+            var codigoModalidad = byte.Parse(textBox6.Text);
+            var codigoEmision = byte.Parse(textBox7.Text);
+            var codigoPuntoVenta = textBox11.Text;
+            var numeroFactura = textBox10.Text;
+            var codigoAmbiente = CodigoAmbienteTextBox.Text;
+            var nit = textBox3.Text;
+            var codigoDocumentoSector = byte.Parse(textBox14.Text);
+            var sucursal = textBox5.Text;
+            var cufp1 = siat.GetCUF(nit, dateStr, sucursal, codigoModalidad, codigoEmision, tipoFacturaDocumento, codigoDocumentoSector, numeroFactura, codigoPuntoVenta);
+            var cufp1Ivan = siat.GetCUFIvan(nit, dateStr, int.Parse(sucursal), codigoModalidad, codigoEmision, tipoFacturaDocumento, codigoDocumentoSector, int.Parse(numeroFactura), int.Parse(codigoPuntoVenta));
+            textBox4.Text = cufp1;
+            textBox13.Text = cufp1Ivan;
+            var cufCufd = await GetCufAndCufd(numeroFactura, dateStr, codigoDocumentoSector, tipoFacturaDocumento, codigoEmision, codigoModalidad, int.Parse(codigoPuntoVenta), CodigoSistemaTextBox.Text, int.Parse(sucursal), CuisTextBox.Text, long.Parse(nit), int.Parse(codigoAmbiente));
+            if (!cufCufd.Cuf.StartsWith(cufp1))
+                throw new InvalidOperationException();
+            CufdTextBox.Text = cufCufd.Cufd;
+        }
+
+        private async void button14_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "XML|*.xml";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK /*&& saveFileDialog1.ShowDialog() == DialogResult.OK*/)
+            {
+                var cufCufd = await GetCufAndCufd(numeroFactura, Siat.GetDateCufFormat(DateTime.Now), codigoDocumentoSector, tipoFacturaDocumento, codigoEmision, codigoModalidad, codigoPuntoVenta, codigoSistema, codigoSucursal, cuis, nit, codigoAmbiente);
+                var doc = new XmlDocument();
+                doc.Load(openFileDialog1.FileName);
+                doc.GetElementsByTagName("cuf")[0].InnerText = cufCufd.Cuf;
+                doc.GetElementsByTagName("cufd")[0].InnerText = cufCufd.Cufd;
+                doc.Save(openFileDialog1.FileName);
+            }
+        }
+
+        private string GetCufFromXml(XmlDocument doc)
+        {
+            return doc.GetElementsByTagName("cuf")[0].InnerText;
+        }
+
+        private string GetCufdFromXml(XmlDocument doc)
+        {
+            return doc.GetElementsByTagName("cufd")[0].InnerText;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            textBox12.Text = Siat.GetDateCufFormat(DateTime.Now);
         }
     }
 
