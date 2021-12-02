@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<facturaElectronicaCompraVenta xsi:noNamespaceSchemaLocation="/compraVenta/facturaElectronicaCompraVenta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <cabecera>
+    <nitEmisor>1014381027</nitEmisor>
+    <razonSocialEmisor>Carlos Loza</razonSocialEmisor>
+    <municipio>La Paz</municipio>
+    <telefono>2846005</telefono>
+    <numeroFactura>1</numeroFactura>
+    <cuf>456821D7945913D8C2693F800626FC0692009E06A89A3A78B43BFDC74</cuf>
+    <cufd>BQcKhQzxyQkJBNkjdGMDA3ODhFRTc=Qj5Kdk9QRE1WVUFQwQTYxOEU2QjE3M</cufd>
+    <codigoSucursal>0</codigoSucursal>
+    <direccion>CALLE MANUEL IGNACIO SALVATIERRA NRO.710 ZONA CASCO VIEJO UV:000A MZA:232</direccion>
+    <codigoPuntoVenta>0</codigoPuntoVenta>
+    <fechaEmision>2021-12-02T15:15:58.573</fechaEmision>
+    <nombreRazonSocial>Mi razon social</nombreRazonSocial>
+    <codigoTipoDocumentoIdentidad>1</codigoTipoDocumentoIdentidad>
+    <numeroDocumento>5115889</numeroDocumento>
+    <complemento xsi:nil="true" />
+    <codigoCliente>51158891</codigoCliente>
+    <codigoMetodoPago>1</codigoMetodoPago>
+    <numeroTarjeta xsi:nil="true" />
+    <montoTotal>100</montoTotal>
+    <montoTotalSujetoIva>100</montoTotalSujetoIva>
+    <codigoMoneda>1</codigoMoneda>
+    <tipoCambio>1</tipoCambio>
+    <montoTotalMoneda>100</montoTotalMoneda>
+    <montoGiftCard xsi:nil="true" />
+    <descuentoAdicional xsi:nil="true" />
+    <codigoExcepcion xsi:nil="true" />
+    <cafc xsi:nil="true" />
+    <leyenda>Una leyenda</leyenda>
+    <usuario>vjcm</usuario>
+    <codigoDocumentoSector>1</codigoDocumentoSector>
+  </cabecera>
+  <detalle>
+    <actividadEconomica>620000</actividadEconomica>
+    <codigoProductoSin>83131</codigoProductoSin>
+    <codigoProducto>123456</codigoProducto>
+    <descripcion>Mi producto</descripcion>
+    <cantidad>1</cantidad>
+    <unidadMedida>1</unidadMedida>
+    <precioUnitario>100</precioUnitario>
+    <montoDescuento>0</montoDescuento>
+    <subTotal>100</subTotal>
+    <numeroSerie>0</numeroSerie>
+    <numeroImei>0</numeroImei>
+  </detalle>
+</facturaElectronicaCompraVenta>
