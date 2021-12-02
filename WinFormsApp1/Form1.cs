@@ -338,10 +338,10 @@ namespace WinFormsApp1
         byte codigoEmision = 1;
         byte tipoFacturaDocumento = 1;
         byte codigoDocumentoSector = 1;
-        string numeroFactura = "12345";
+        string numeroFactura = "1";
         int codigoSucursal = 0;
 
-        private async void button3_Click(object sender, EventArgs e)
+        private async void SendButton_Click(object sender, EventArgs e)
         {
             var compressedFileName = @"D:\Del\facturaElectronicaCompraVenta.xml.gz";
             byte[] compressedBytes = File.ReadAllBytes(compressedFileName);
@@ -359,7 +359,7 @@ namespace WinFormsApp1
             {
                 archivo = compressedBytes,
                 cuis = cuis,
-                fechaEnvio = DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm:ss.fff"),
+                fechaEnvio = GetDateFromXml(doc),//DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm:ss.fff"),
                 codigoSucursal = codigoSucursal,
                 codigoAmbiente = codigoAmbiente,
                 codigoSistema = codigoSistema,
@@ -894,7 +894,7 @@ namespace WinFormsApp1
                 doc.Load(openFileDialog1.FileName);
                 doc.GetElementsByTagName("cuf")[0].InnerText = cufCufd.Cuf;
                 doc.GetElementsByTagName("cufd")[0].InnerText = cufCufd.Cufd;
-                doc.GetElementsByTagName("fechaEmision")[0].InnerText = date.ToString("s") + ".000";
+                doc.GetElementsByTagName("fechaEmision")[0].InnerText = date.ToString("yyyy-MM-ddTHH:mm:ss.fff");
                 doc.Save(openFileDialog1.FileName);
             }
         }
@@ -909,10 +909,15 @@ namespace WinFormsApp1
             return doc.GetElementsByTagName("cufd")[0].InnerText;
         }
 
+        private string GetDateFromXml(XmlDocument doc)
+        {
+            return doc.GetElementsByTagName("fechaEmision")[0].InnerText;
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             textBox12.Text = Siat.GetDateCufFormat(DateTime.Now);
-        }            
+        }
     }
 
     public enum PemStringType

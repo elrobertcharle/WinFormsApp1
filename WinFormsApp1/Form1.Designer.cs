@@ -33,7 +33,7 @@ namespace WinFormsApp1
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button2 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.SendButton = new System.Windows.Forms.Button();
             this.SignAndCompressButton = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
@@ -123,15 +123,15 @@ namespace WinFormsApp1
             this.textBox1.TabIndex = 3;
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
-            // button3
+            // SendButton
             // 
-            this.button3.Location = new System.Drawing.Point(440, 282);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Send";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.SendButton.Location = new System.Drawing.Point(440, 282);
+            this.SendButton.Name = "SendButton";
+            this.SendButton.Size = new System.Drawing.Size(75, 23);
+            this.SendButton.TabIndex = 4;
+            this.SendButton.Text = "Send";
+            this.SendButton.UseVisualStyleBackColor = true;
+            this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
             // 
             // SignAndCompressButton
             // 
@@ -584,7 +584,7 @@ namespace WinFormsApp1
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.SignAndCompressButton);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.SendButton);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.listBox1);
@@ -606,7 +606,7 @@ namespace WinFormsApp1
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button SendButton;
         private System.Windows.Forms.Button SignAndCompressButton;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
