@@ -41,89 +41,6 @@ namespace WinFormsApp1
                     RemoveWhiteSpaceContent((XmlElement)c);
         }
 
-        private async void button1_Click(object sender, EventArgs e)
-        {
-            XmlDocument doc = new XmlDocument();
-            //doc.LoadXml("<root><a t=\"1\" a=\"1\" /></root>");
-            doc.Load(@"D:\Del\facturaElectronicaCompraVenta.xml");
-            var child = doc.DocumentElement.ChildNodes[0];
-            //child.InnerText = "xxxxx";
-
-            //var z = (XmlElement)doc.DocumentElement.FirstChild;
-            //z.IsEmpty = true;
-            //doc.PreserveWhitespace = false;
-            //doc.Save(@"d:\del\xxx.txt");
-
-
-            var c2 = new Siat();
-            var canonicalizeDoc = c2.CanonicalizeXml2(doc);
-            //canonicalizeDoc.PreserveWhitespace = true;
-            //RemoveWhiteSpaceContent(canonicalizeDoc.DocumentElement);
-
-
-            //using (var sw = XmlWriter.Create(@"d:\del\xxx.txt", new XmlWriterSettings
-            //{
-            //    Indent = false,
-            //    Encoding = new UTF8Encoding(false)
-
-            //}))
-            //    canonicalizeDoc.Save(sw);
-            //canonicalizeDoc.Save(@"d:\del\xxx.txt");
-
-            //XmlDocument doc = new XmlDocument();
-            //doc.LoadXml("<root><a t=\"1\" a=\"1\" /><a>ñ edición</a></root>");
-            //var xdoc = XDocument.Parse("<root><a t=\"1\" a=\"1\" ></a><a>ñ edición</a></root>");
-            //using (var sw = XmlWriter.Create(@"d:\del\xxx.txt", new XmlWriterSettings
-            //{
-            //    Encoding = Encoding.UTF8,
-
-            //}))
-            //    xdoc.Save(sw);
-
-
-            //var c2 = new Class2();
-            //var canonicalizeDoc = c2.CanonicalizeXml(doc);
-            //canonicalizeDoc.Save(@"d:\del\xxx.txt");
-
-
-
-
-            //XmlDocument doc = new XmlDocument();
-            //doc.LoadXml("<root><a t=\"1\" /></root>");
-            //XmlDsigC14NTransform c = new XmlDsigC14NTransform();
-            //c.LoadInput(doc);
-            //using (var s = (Stream)c.GetOutput(typeof(Stream)))
-            //using (var fs = File.OpenWrite(@"d:\del\xxx.txt"))
-            //{
-            //    s.CopyTo(fs);
-            //    s.Flush();
-            //}
-
-
-
-            //var last = 0;
-            //for (var i = 1; i <= 1891; i++)
-            //{
-            //    last = IncrementBase9(last);
-            //    listBox1.Items.Add($"{i}-{last}");
-            //}
-            //MessageBox.Show(Convert(82).ToString());
-        }
-
-
-        //private async Task SwapValue()
-        //{
-        //    var f = await Task.Run(() =>
-        //      {
-        //          if (x == 0)
-        //              x += 1;
-        //          else if (x == 1)
-        //              x -= 1;
-        //          else
-        //              throw new Exception("Out of range");
-        //      });
-        //}
-
         int digitsProduct(int product)
         {
             if (product == 0)
@@ -236,62 +153,12 @@ namespace WinFormsApp1
         private void button2_Click(object sender, EventArgs e)
         {
             var c = new Siat();
-            label1.Text = textBox2.Text + c.GetModulus11CheckDigit(textBox2.Text);
-            //XmlDocument doc = new XmlDocument();
-            //var root = doc.CreateElement("cars");
-            //doc.AppendChild(root);
-            ////doc.Save(@"d:\del\x.xml");
-            //XDocument xd = new XDocument();
-            //xd.Add(new XElement("cars"));
-            //xd.Root.Add(new XElement("car", 1));
-            //xd.Root.Add(new XElement("car", 2));
-            //Class2.SaveXml(xd, @"d:\del\x.xml");
+            textBox1.Text = textBox2.Text + c.GetModulus11CheckDigit(textBox2.Text);
         }
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
-        //Mouse actions
-        private const int MOUSEEVENTF_LEFTDOWN = 0x02;
-        private const int MOUSEEVENTF_LEFTUP = 0x04;
-        private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
-        private const int MOUSEEVENTF_RIGHTUP = 0x10;
-
-        public void DoMouseClick()
-        {
-            //Call the imported function with the cursor's current position
-            uint X = (uint)Cursor.Position.X;
-            uint Y = (uint)Cursor.Position.Y;
-            mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, X, Y, 0, 0);
-        }
 
         int c = 0;
-        private void Form1_Click(object sender, EventArgs e)
-        {
 
-        }
-
-        private void Form1_MouseClick(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void Form1_MouseDown(object sender, MouseEventArgs e)
-        {
-            Text = (++c).ToString();
-        }
-
-        private async void textBox1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Oem3)
-            {
-                for (var i = 0; i < 20; i++)
-                {
-                    await Task.Delay(5);
-                    DoMouseClick();
-                }
-            }
-
-        }
 
         private async Task<CufCudResult> GetCufAndCufd(string numeroFactura, string date, byte codigoDocumentoSector, byte tipoFacturaDocumento, byte codigoEmision, byte codigoModalidad, int codigoPuntoVenta, string codigoSistema, int codigoSucursal, string cuis, long nit, int codigoAmbiente)
         {
@@ -416,54 +283,6 @@ namespace WinFormsApp1
         }
 
 
-
-        private void SignData()
-        {
-            var cert = new X509Certificate2(System.IO.File.ReadAllBytes(@"C:\Users\elrob\Desktop\BoliviaImpuestos\MyCert\cert.pfx"), "12345");
-            var publicKey = new X509Certificate2(@"C:\Users\elrob\Desktop\BoliviaImpuestos\MyCert\my-cert.pem");
-
-            MessageBox.Show(VerifyXmlSig(@"D:\Del\XMLFile1.xml", publicKey).ToString());
-
-            return;
-
-            var doc = new XmlDocument();
-            //doc.PreserveWhitespace = true;
-            doc.LoadXml("<cars><car>1</car><car>2</car></cars>");
-            SingXml(doc, cert);
-
-            textBox1.Text = doc.OuterXml;
-
-            return;
-
-
-
-            var text = "Hola que bola";
-
-            string resultsTrue = cert.ToString(true);
-            byte[] signature;
-
-            using (var service = cert.GetRSAPrivateKey())
-            {
-                //var p = service.ExportParameters(true);
-                //var docx = XDocument.Parse(service.ToXmlString(true));
-
-                var bytes = System.Text.Encoding.UTF8.GetBytes(text);
-                var sha256 = SHA256.Create();
-                var hash = sha256.ComputeHash(bytes);
-
-                signature = service.SignHash(hash, System.Security.Cryptography.HashAlgorithmName.SHA256, System.Security.Cryptography.RSASignaturePadding.Pkcs1);
-            }
-
-            using (var service = cert.GetRSAPrivateKey())
-            {
-                var bytes = System.Text.Encoding.UTF8.GetBytes(text);
-                var sha256 = SHA256.Create();
-                var hash = sha256.ComputeHash(bytes);
-
-                var ok = service.VerifyHash(hash, signature, HashAlgorithmName.SHA256, System.Security.Cryptography.RSASignaturePadding.Pkcs1);
-            }
-        }
-
         private bool VerifyXmlSig(string fileName, X509Certificate2 certificate)
         {
             var doc = new XmlDocument();
@@ -511,6 +330,11 @@ namespace WinFormsApp1
             return System.Convert.FromBase64String(pemString.Substring(start, end));
         }
 
+        /// <summary>
+        /// Decodifica una private key en formato PKCS1
+        /// </summary>
+        /// <param name="privateKeyBytes"></param>
+        /// <returns></returns>
         public static RSACryptoServiceProvider DecodeRsaPrivateKey(byte[] privateKeyBytes)
         {
             MemoryStream ms = new MemoryStream(privateKeyBytes);
@@ -652,14 +476,16 @@ namespace WinFormsApp1
 
             var privateKeyFileNamePKCS1 = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS1.pem";
             var privateKeyFileNamePKCS8 = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS8.pem";
-            var pkBytes = GetBytesFromPEM(File.ReadAllText(privateKeyFileNamePKCS1, System.Text.Encoding.UTF8), PemStringType.RsaPrivateKey);
-            var rsaPKCS1 = DecodeRsaPrivateKey(pkBytes);
-            var rsaPKCS8 = RSA.Create();
-            rsaPKCS8.ImportFromPem(File.ReadAllText(privateKeyFileNamePKCS8).ToCharArray());
-
             var signedFileName = @"d:\del\facturaElectronicaCompraVentaSigned.xml";
             var canonicalizedName = @"d:\del\facturaElectronicaCompraVentaCanonicalized.xml";
             var compressedFileName = @"d:\del\facturaElectronicaCompraVenta.xml.gz";
+
+            var pkBytes = GetBytesFromPEM(File.ReadAllText(privateKeyFileNamePKCS1, System.Text.Encoding.UTF8), PemStringType.RsaPrivateKey);
+            //var rsaPKCS1 = DecodeRsaPrivateKey(pkBytes);
+            var rsaPKCS8 = RSA.Create();
+            rsaPKCS8.ImportFromPem(File.ReadAllText(privateKeyFileNamePKCS8).ToCharArray());
+
+
 
             var c2 = new Siat();
 
@@ -667,24 +493,21 @@ namespace WinFormsApp1
             //doc.PreserveWhitespace = true;
             doc.Load(@"D:\Del\facturaElectronicaCompraVenta.xml");
 
-            var canonicalizedStream = c2.CanonicalizeXml2(doc);
+            using (var canonicalizedStream = c2.CanonicalizeXml2(doc))
+            {
+                doc = new XmlDocument();
+                doc.Load(canonicalizedStream);
 
+                c2.SingXml(doc, rsaPKCS8, certificate);
 
-            doc = new XmlDocument();
-            doc.Load(canonicalizedStream);
+                Siat.SaveXml(doc, signedFileName);
 
-            c2.SingXml(doc, rsaPKCS8, certificate);
+                var ok = c2.VerifyXmlSig(doc);
 
-            Siat.SaveXml(doc, signedFileName);
+                c2.CompressFile(signedFileName, compressedFileName);
 
-            //using (var writer = XmlWriter.Create(signedFileName, new XmlWriterSettings { /*Indent = true*/ Encoding = Encoding.UTF8 }))
-            //    doc.Save(writer);
-
-            var ok = c2.VerifyXmlSig(doc);
-
-            c2.CompressFile(signedFileName, compressedFileName);
-
-            MessageBox.Show(ok.ToString());
+                MessageBox.Show(ok.ToString());
+            }
         }
 
         public string ByteArrayToHexString(byte[] ba)
@@ -784,15 +607,10 @@ namespace WinFormsApp1
                 c2.SingXml(doc, rsaPKCS8, certificate);
 
                 Siat.SaveXml(doc, saveFileDialog1.FileName);
-                //doc.Save(saveFileDialog1.FileName);
-
-                //using (var writer = XmlWriter.Create(saveFileDialog1.FileName, new XmlWriterSettings { /*Indent = true*/ Encoding = Encoding.UTF8 }))
-                //    doc.Save(writer);
-
             }
         }
 
-        private void button9_Click(object sender, EventArgs e)
+        private void CanonicalizeXmlButton_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -800,31 +618,16 @@ namespace WinFormsApp1
 
                 var doc = new XmlDocument();
                 doc.Load(openFileDialog1.FileName);
-                doc = c2.CanonicalizeXml(doc);
-                doc.Save(saveFileDialog1.FileName);
+                using (var ms = c2.CanonicalizeXml2(doc))
+                {
+                    doc.Load(ms);
+                    Siat.SaveXml(doc, saveFileDialog1.FileName);
+                }
             }
-        }
-
-        private void button10_Click(object sender, EventArgs e)
-        {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(openFileDialog1.FileName);
-                XmlWriterSettings settings = new XmlWriterSettings { Indent = true };
-                XmlWriter writer = XmlWriter.Create(saveFileDialog1.FileName, settings);
-                doc.Save(writer);
-            }
-        }
-
-        private void button11_Click(object sender, EventArgs e)
-        {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                Siat.RemoveBOM(openFileDialog1.FileName);
         }
 
         bool _XmlSchemeError;
-        private void button12_Click(object sender, EventArgs e)
+        private void ValidateXmlButton_Click(object sender, EventArgs e)
         {
             _XmlSchemeError = false;
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -832,12 +635,13 @@ namespace WinFormsApp1
                 XmlSchemaSet schema = new XmlSchemaSet();
                 schema.Add("", @"D:\Del\Cognos_XML_XSD\facturaElectronicaCompraVenta.xsd");
                 schema.Add("http://www.w3.org/2000/09/xmldsig#", @"D:\Del\Cognos_XML_XSD\SignatureSchema.xsd");
-                XmlReader rd = XmlReader.Create(openFileDialog1.FileName);
-                //XmlReader rd = XmlReader.Create(@"D:\Del\Cognos_XML_XSD\cognosxml");
-                XDocument doc = XDocument.Load(rd);
-                doc.Validate(schema, ValidationEventHandler);
-                if (!_XmlSchemeError)
-                    MessageBox.Show("OK");
+                using (XmlReader rd = XmlReader.Create(openFileDialog1.FileName))
+                {
+                    XDocument doc = XDocument.Load(rd);
+                    doc.Validate(schema, ValidationEventHandler);
+                    if (!_XmlSchemeError)
+                        MessageBox.Show("OK");
+                }
             }
         }
 
@@ -849,11 +653,6 @@ namespace WinFormsApp1
             {
                 if (type == XmlSeverityType.Error) throw new Exception(e.Message);
             }
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private async void GenerateCufButton_Click(object sender, EventArgs e)
@@ -917,6 +716,7 @@ namespace WinFormsApp1
         {
             textBox12.Text = Siat.GetDateCufFormat(DateTime.Now);
         }
+
     }
 
     public enum PemStringType

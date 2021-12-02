@@ -101,19 +101,7 @@ namespace WinFormsApp1
             {
                 originalFileStream.CopyTo(compressor);
             }
-        }
-
-        public XmlDocument CanonicalizeXml(XmlDocument doc)
-        {
-            XmlDsigC14NTransform c = new XmlDsigC14NTransform();
-            c.LoadInput(doc);
-            using (var s = (Stream)c.GetOutput(typeof(Stream)))
-            {
-                var result = new XmlDocument();
-                result.Load(s);
-                return result;
-            }
-        }
+        }           
 
         public MemoryStream CanonicalizeXml2(XmlDocument doc)
         {
@@ -205,7 +193,7 @@ namespace WinFormsApp1
             if (remainder == 0)
                 return sum + "0";
             if (remainder == 1)
-                throw new InvalidOperationException("Invalid Modulus11.");
+                throw new InvalidOperationException("Invalid Modulus11. No se puede calcular el digito de chequeo para esta secuencia.");
             return (11 - remainder).ToString();
         }
 
