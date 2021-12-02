@@ -148,7 +148,7 @@ namespace WinFormsApp1
 
                 bytes = new byte[] { 0xA };
                 fs.Write(bytes, 0, bytes.Length);
-                
+
                 bytes = System.Text.Encoding.UTF8.GetBytes(doc.DocumentElement.OuterXml);
                 fs.Write(bytes, 0, bytes.Length);
 
@@ -189,7 +189,7 @@ namespace WinFormsApp1
             }
         }
 
-        public string AddModulus11(string n)
+        public string GetModulus11CheckDigit(string n)
         {
             var factor = 2;
             var sum = 0;
@@ -206,9 +206,27 @@ namespace WinFormsApp1
                 return sum + "0";
             if (remainder == 1)
                 throw new InvalidOperationException("Invalid Modulus11.");
-            return n + (11 - remainder).ToString();
+            return (11 - remainder).ToString();
         }
 
+        public string GetModulus11CheckDigit2(string number)
+        {
+            int Sum = 0;
+            for (int i = number.Length - 1, Multiplier = 2; i >= 0; i--)
+            {
+                Sum += (int)char.GetNumericValue(number[i]) * Multiplier;
+
+                if (++Multiplier == 8) Multiplier = 2;
+            }
+            string Validator = (11 - (Sum % 11)).ToString();
+
+            if (Validator == "11")
+                Validator = "0";
+            else if (Validator == "10")
+                Validator = "X";
+
+            return Validator;
+        }
 
         public string GetCUF(string nit, string date, string sucursal, byte modalidad, byte tipoEmision, byte tipoFactura, byte tipoDocumentoSector, string numeroFactura, string puntoVenta)
         {
@@ -251,7 +269,7 @@ namespace WinFormsApp1
                 + tipoDocumentoSector.ToString().PadLeft(2, '0')
                 + numeroFactura.PadLeft(10, '0')
                 + puntoVenta.PadLeft(4, '0');
-            x = AddModulus11(x);
+            x += GetModulus11CheckDigit(x);
             var bi = System.Numerics.BigInteger.Parse(x);
             return bi.ToString("X");
         }
@@ -276,7 +294,7 @@ namespace WinFormsApp1
             cadena += numeroFactura.ToString("D10");
             cadena += puntoVenta.ToString("D4");
 
-            cadena = AddModulus11(cadena);
+            cadena += GetModulus11CheckDigit(cadena);
 
             var cuf = System.Numerics.BigInteger.Parse(cadena);
             return cuf.ToString("X");

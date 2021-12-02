@@ -235,9 +235,8 @@ namespace WinFormsApp1
 
         private void button2_Click(object sender, EventArgs e)
         {
-
             var c = new Siat();
-            label1.Text = c.AddModulus11(textBox2.Text);
+            label1.Text = textBox2.Text + c.GetModulus11CheckDigit(textBox2.Text);
             //XmlDocument doc = new XmlDocument();
             //var root = doc.CreateElement("cars");
             //doc.AppendChild(root);
