@@ -195,21 +195,27 @@ namespace WinFormsApp1
             }
         }
 
-        long nit = 1014381027;
-        int codigoAmbiente = 2;
-        byte codigoModalidad = 1;
-        int codigoPuntoVenta = 0;
-        string codigoSistema = "6D0A618E6B1727F00788EE7";
-        string cuis = "31629D89";
-        byte codigoEmision = 1;
-        byte tipoFacturaDocumento = 1;
-        byte codigoDocumentoSector = 1;
-        string numeroFactura = "1";
-        int codigoSucursal = 0;
+        private readonly long nit = 1014381027;
+        private readonly int codigoAmbiente = 2;
+        private readonly byte codigoModalidad = 1;
+        private readonly int codigoPuntoVenta = 0;
+        private readonly string codigoSistema = "6D0A618E6B1727F00788EE7";
+        private readonly string cuis = "31629D89";
+        private readonly byte codigoEmision = 1;
+        private readonly byte tipoFacturaDocumento = 1;
+        private readonly byte codigoDocumentoSector = 1;
+        private readonly string numeroFactura = "1";
+        private readonly int codigoSucursal = 0;
+
+        private readonly string privateKeyFileNamePKCS1 = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS1.pem";
+        private readonly string privateKeyFileNamePKCS8 = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS8.pem";
+        private readonly string certificateFileName = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\CR.pem";
+        private readonly string signedFileName = @"d:\del\facturaElectronicaCompraVentaSigned.xml";
+        private readonly string canonicalizedName = @"d:\del\facturaElectronicaCompraVentaCanonicalized.xml";
+        private readonly string compressedFileName = @"d:\del\facturaElectronicaCompraVenta.xml.gz";
 
         private async void SendButton_Click(object sender, EventArgs e)
         {
-            var compressedFileName = @"D:\Del\facturaElectronicaCompraVenta.xml.gz";
             byte[] compressedBytes = File.ReadAllBytes(compressedFileName);
             var hash = SHA256.Create().ComputeHash(compressedBytes);
 
@@ -472,39 +478,31 @@ namespace WinFormsApp1
 
         private void SignAndCompressButton_Click(object sender, EventArgs e)
         {
-            var certificate = new X509Certificate2(@"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\CR.pem");
-
-            var privateKeyFileNamePKCS1 = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS1.pem";
-            var privateKeyFileNamePKCS8 = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS8.pem";
-            var signedFileName = @"d:\del\facturaElectronicaCompraVentaSigned.xml";
-            var canonicalizedName = @"d:\del\facturaElectronicaCompraVentaCanonicalized.xml";
-            var compressedFileName = @"d:\del\facturaElectronicaCompraVenta.xml.gz";
-
-            var pkBytes = GetBytesFromPEM(File.ReadAllText(privateKeyFileNamePKCS1, System.Text.Encoding.UTF8), PemStringType.RsaPrivateKey);
+            var certificate = new X509Certificate2(certificateFileName);
+            
+            //var pkBytes = GetBytesFromPEM(File.ReadAllText(privateKeyFileNamePKCS1, System.Text.Encoding.UTF8), PemStringType.RsaPrivateKey);
             //var rsaPKCS1 = DecodeRsaPrivateKey(pkBytes);
+
             var rsaPKCS8 = RSA.Create();
             rsaPKCS8.ImportFromPem(File.ReadAllText(privateKeyFileNamePKCS8).ToCharArray());
 
-
-
-            var c2 = new Siat();
+            var siat = new Siat();
 
             var doc = new XmlDocument();
-            //doc.PreserveWhitespace = true;
             doc.Load(@"D:\Del\facturaElectronicaCompraVenta.xml");
 
-            using (var canonicalizedStream = c2.CanonicalizeXml2(doc))
+            using (var canonicalizedStream = siat.CanonicalizeXml2(doc))
             {
                 doc = new XmlDocument();
                 doc.Load(canonicalizedStream);
 
-                c2.SingXml(doc, rsaPKCS8, certificate);
+                siat.SingXml(doc, rsaPKCS8, certificate);
 
                 Siat.SaveXml(doc, signedFileName);
 
-                var ok = c2.VerifyXmlSig(doc);
+                var ok = siat.VerifyXmlSig(doc);
 
-                c2.CompressFile(signedFileName, compressedFileName);
+                siat.CompressFile(signedFileName, compressedFileName);
 
                 MessageBox.Show(ok.ToString());
             }
@@ -518,7 +516,7 @@ namespace WinFormsApp1
             return hex.ToString();
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void VerifySignatureButton_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -528,21 +526,6 @@ namespace WinFormsApp1
                 var ok = c2.VerifyXmlSig(doc);
                 MessageBox.Show(ok.ToString());
             }
-
-
-
-
-            //var certificate = new X509Certificate2(@"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\CR.pem");
-
-
-
-            //var c2 = new Class2();
-
-            //var doc = new XmlDocument();
-            ////doc.PreserveWhitespace = true;
-            //doc.Load(@"D:\Del\cognosxml.xml");
-            //var ok = c2.VerifyXmlSig(doc, certificate);
-            //MessageBox.Show(ok.ToString());
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -559,26 +542,20 @@ namespace WinFormsApp1
 
         private void button7_Click(object sender, EventArgs e)
         {
-
             openFileDialog1.Filter = "XML|*.xml";
             saveFileDialog1.Filter = "XML|*.xml";
             if (openFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-
                 var certificate = new X509Certificate2(@"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\CR.pem");
 
-                var privateKeyFileName = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS1.pem";
-                var privateKeyFileNameV8 = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS8.pem";
-                var pkBytes = GetBytesFromPEM(File.ReadAllText(privateKeyFileName, System.Text.Encoding.UTF8), PemStringType.RsaPrivateKey);
+                var pkBytes = GetBytesFromPEM(File.ReadAllText(privateKeyFileNamePKCS1, System.Text.Encoding.UTF8), PemStringType.RsaPrivateKey);
                 var rsa = DecodeRsaPrivateKey(pkBytes);
                 var rsaV8 = RSA.Create();
-                rsaV8.ImportFromPem(File.ReadAllText(privateKeyFileNameV8).ToCharArray());
-
+                rsaV8.ImportFromPem(File.ReadAllText(privateKeyFileNamePKCS8).ToCharArray());
 
                 var c2 = new Siat();
 
                 var doc = new XmlDocument();
-                //doc.PreserveWhitespace = true;
                 doc.Load(openFileDialog1.FileName);
                 c2.SingXml(doc, rsaV8, certificate);
 
@@ -592,8 +569,6 @@ namespace WinFormsApp1
             {
                 var certificate = new X509Certificate2(@"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\CR.pem");
 
-                var privateKeyFileNamePKCS1 = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS1.pem";
-                var privateKeyFileNamePKCS8 = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS8.pem";
                 var pkBytes = GetBytesFromPEM(File.ReadAllText(privateKeyFileNamePKCS1, System.Text.Encoding.UTF8), PemStringType.RsaPrivateKey);
                 var rsaPKCS1 = DecodeRsaPrivateKey(pkBytes);
                 var rsaPKCS8 = RSA.Create();

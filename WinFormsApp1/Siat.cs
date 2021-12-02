@@ -270,12 +270,5 @@ namespace WinFormsApp1
             var cuf = System.Numerics.BigInteger.Parse(cadena);
             return cuf.ToString("X");
         }
-
-        //public Stream CanonicalizeXmlStream(XmlDocument doc)
-        //{
-        //    XmlDsigC14NTransform c = new XmlDsigC14NTransform();
-        //    c.LoadInput(doc);
-        //    return (Stream)c.GetOutput(typeof(Stream));
-        //}
     }
 }
