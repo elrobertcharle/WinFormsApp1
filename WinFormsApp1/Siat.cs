@@ -139,24 +139,7 @@ namespace WinFormsApp1
 
                 bytes = System.Text.Encoding.UTF8.GetBytes(doc.DocumentElement.OuterXml);
                 fs.Write(bytes, 0, bytes.Length);
-
-
-                //var s = ByteArrayToHexString(bytes);
             }
-
-            //doc.CreateXmlDeclaration("1.0", "UTF-8", "yes");
-            //XmlWriterSettings settings = new XmlWriterSettings
-            //{
-            //    Indent = true,
-            //    CheckCharacters = false,
-            //    NewLineHandling = NewLineHandling.None,
-            //    Encoding = Encoding.UTF8
-            //};
-            //using (XmlWriter writer = XmlWriter.Create(fileName, settings))
-            //{
-            //    writer.WriteStartDocument(true);
-            //    doc.Save(writer);
-            //}
         }
 
         public static void RemoveBOM(string source)
