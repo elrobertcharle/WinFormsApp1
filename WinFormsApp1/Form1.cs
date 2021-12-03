@@ -41,123 +41,11 @@ namespace WinFormsApp1
                     RemoveWhiteSpaceContent((XmlElement)c);
         }
 
-        int digitsProduct(int product)
-        {
-            if (product == 0)
-                return 10;
-            if (product == 1)
-                return 1;
-            var l = GetFactors(product);
-            if (l.Count == 0)
-                return -1;
-            return GetDigitsProduct(l);
-        }
-
-        List<int> GetFactors(int n)
-        {
-            var result = new List<int>();
-            int c = n;
-            for (var i = 2; i <= n / 2;)
-            {
-                if (c % i == 0)
-                {
-                    result.Add(i);
-                    c /= i;
-                    if (c == 1)
-                        break;
-                }
-                else
-                    i++;
-            }
-            return result;
-        }
-
-        private int GetDigitsProduct(List<int> factors)
-        {
-            var l = new List<int>();
-            int d = factors.Last();
-            for (var i = factors.Count - 2; i >= 0; i--)
-            {
-                if (d * factors[i] < 10)
-                    d *= factors[i];
-                else
-                {
-                    l.Add(d);
-                    d = factors[i];
-                }
-                if (i == 0)
-                    l.Add(d);
-            }
-
-
-            l.Sort();
-            return int.Parse(string.Join("", l));
-        }
-        private int Convert(int d)
-        {
-            var s = d.ToString();
-            int dividendo = 0;
-            int result = 0;
-            int remainder = 0;
-            if (d % 9 == 0)
-                return d + d / 9 - 1;
-
-            for (var i = 0; i < s.Length; i++)
-            {
-                dividendo = dividendo * 10 + int.Parse(s[i].ToString());
-
-                if (i == 0)
-                    continue;
-                remainder = dividendo % 9;
-                var x = dividendo / 9;
-                result = result * 10 + x;
-                if (remainder == 0)
-                    result = result * 10 + 1;
-                dividendo = remainder;
-
-            }
-            if (remainder > 0)
-                result = result * 10 + remainder;
-            return result;
-        }
-
-        private int IncrementBase9(int x)
-        {
-
-            var digits = x.ToString().ToArray().Select(c => int.Parse(c.ToString())).ToList();
-            if (digits[digits.Count - 1] < 9)
-                return x + 1;
-
-            digits[digits.Count - 1] = 1;
-            bool carry = true;
-            for (var i = digits.Count - 2; i >= 0; i--)
-            {
-                if (digits[i] == 9)
-                    digits[i] = 1;
-                else
-                {
-                    digits[i]++;
-                    carry = false;
-                    break;
-                }
-            }
-
-            var j = string.Join("", digits);
-            if (carry)
-                return int.Parse("1" + j);
-            else
-                return int.Parse(j);
-
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             var c = new Siat();
-            textBox1.Text = textBox2.Text + c.GetModulus11CheckDigit(textBox2.Text);
+            textBox1.Text = textBox2.Text + c.GetModulus11CheckDigitPaceno(textBox2.Text);
         }
-
-
-        int c = 0;
 
 
         private async Task<CufCudResult> GetCufAndCufd(string numeroFactura, string date, byte codigoDocumentoSector, byte tipoFacturaDocumento, byte codigoEmision, byte codigoModalidad, int codigoPuntoVenta, string codigoSistema, int codigoSucursal, string cuis, long nit, int codigoAmbiente)
@@ -210,13 +98,14 @@ namespace WinFormsApp1
         private readonly string privateKeyFileNamePKCS1 = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS1.pem";
         private readonly string privateKeyFileNamePKCS8 = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\PK-PKCS8.pem";
         private readonly string certificateFileName = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\CR.pem";
-        private readonly string signedFileName = @"d:\del\facturaElectronicaCompraVentaSigned.xml";
-        private readonly string canonicalizedName = @"d:\del\facturaElectronicaCompraVentaCanonicalized.xml";
-        private readonly string compressedFileName = @"d:\del\facturaElectronicaCompraVenta.xml.gz";
+        private readonly string xmlFileName = @"D:\Del\facturaElectronicaCompraVenta.xml";
+        private readonly string signedXmlFileName = @"d:\del\facturaElectronicaCompraVentaSigned.xml";
+        private readonly string canonicalizeXmldName = @"d:\del\facturaElectronicaCompraVentaCanonicalized.xml";
+        private readonly string compressedXmlFileName = @"d:\del\facturaElectronicaCompraVenta.xml.gz";
 
         private async void SendButton_Click(object sender, EventArgs e)
         {
-            byte[] compressedBytes = File.ReadAllBytes(compressedFileName);
+            byte[] compressedBytes = File.ReadAllBytes(compressedXmlFileName);
             var hash = SHA256.Create().ComputeHash(compressedBytes);
 
             var c = new ServiceReference1.ServicioFacturacionClient();
@@ -225,7 +114,7 @@ namespace WinFormsApp1
             var c2 = new ServiceReference2.ServicioFacturacionCodigosClient();
 
             var doc = new XmlDocument();
-            doc.Load(@"D:\Del\facturaElectronicaCompraVenta.xml");
+            doc.Load(xmlFileName);
 
             var p = new ServiceReference1.solicitudRecepcionFactura
             {
@@ -267,27 +156,6 @@ namespace WinFormsApp1
             var xmlSigElement = signedXml.GetXml();
             doc.DocumentElement.AppendChild(doc.ImportNode(xmlSigElement, true));
         }
-
-        private void SignDataWithCognosKey()
-        {
-            var publicKey = new X509Certificate2(@"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\Marco_Antonio_Erlwein_Albares_CERT.pem");
-
-            var rsa = RSA.Create();
-            var fileName = @"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\Marco_Antonio_Erlwein_Albares_PK.pem";
-            //rsa.ImportFromPem(fileName);
-            var pkBytes = GetBytesFromPEM(File.ReadAllText(fileName, System.Text.Encoding.UTF8), PemStringType.RsaPrivateKey);
-
-            RSACryptoServiceProvider prov = DecodeRsaPrivateKey(pkBytes);
-
-            //var decryptedBytes = rsa.Decrypt(, PemStringType.RsaPrivateKey), RSAEncryptionPadding.Pkcs1);
-
-            //var key = Encoding.UTF8.GetString(decryptedBytes);
-            //var cert = new X509Certificate2(key);
-
-            //var cert = new X509Certificate2(@"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\Marco_Antonio_Erlwein_Albares_PK.pem");
-
-        }
-
 
         private bool VerifyXmlSig(string fileName, X509Certificate2 certificate)
         {
@@ -479,7 +347,7 @@ namespace WinFormsApp1
         private void SignAndCompressButton_Click(object sender, EventArgs e)
         {
             var certificate = new X509Certificate2(certificateFileName);
-            
+
             //var pkBytes = GetBytesFromPEM(File.ReadAllText(privateKeyFileNamePKCS1, System.Text.Encoding.UTF8), PemStringType.RsaPrivateKey);
             //var rsaPKCS1 = DecodeRsaPrivateKey(pkBytes);
 
@@ -489,7 +357,7 @@ namespace WinFormsApp1
             var siat = new Siat();
 
             var doc = new XmlDocument();
-            doc.Load(@"D:\Del\facturaElectronicaCompraVenta.xml");
+            doc.Load(xmlFileName);
 
             using (var canonicalizedStream = siat.CanonicalizeXml2(doc))
             {
@@ -498,11 +366,11 @@ namespace WinFormsApp1
 
                 siat.SingXml(doc, rsaPKCS8, certificate);
 
-                Siat.SaveXml(doc, signedFileName);
+                Siat.SaveXml(doc, signedXmlFileName);
 
                 var ok = siat.VerifyXmlSig(doc);
 
-                siat.CompressFile(signedFileName, compressedFileName);
+                siat.CompressFile(signedXmlFileName, compressedXmlFileName);
 
                 MessageBox.Show(ok.ToString());
             }
@@ -528,7 +396,7 @@ namespace WinFormsApp1
             }
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void CompressButton_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -546,7 +414,7 @@ namespace WinFormsApp1
             saveFileDialog1.Filter = "XML|*.xml";
             if (openFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                var certificate = new X509Certificate2(@"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\CR.pem");
+                var certificate = new X509Certificate2(certificateFileName);
 
                 var pkBytes = GetBytesFromPEM(File.ReadAllText(privateKeyFileNamePKCS1, System.Text.Encoding.UTF8), PemStringType.RsaPrivateKey);
                 var rsa = DecodeRsaPrivateKey(pkBytes);
@@ -567,7 +435,7 @@ namespace WinFormsApp1
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK && saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                var certificate = new X509Certificate2(@"C:\Users\elrob\Desktop\BoliviaImpuestos\CognosCert\del\CR.pem");
+                var certificate = new X509Certificate2(certificateFileName);
 
                 var pkBytes = GetBytesFromPEM(File.ReadAllText(privateKeyFileNamePKCS1, System.Text.Encoding.UTF8), PemStringType.RsaPrivateKey);
                 var rsaPKCS1 = DecodeRsaPrivateKey(pkBytes);

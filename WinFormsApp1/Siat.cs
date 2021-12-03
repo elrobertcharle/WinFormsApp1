@@ -101,7 +101,7 @@ namespace WinFormsApp1
             {
                 originalFileStream.CopyTo(compressor);
             }
-        }           
+        }
 
         public MemoryStream CanonicalizeXml2(XmlDocument doc)
         {
@@ -199,6 +199,50 @@ namespace WinFormsApp1
             return Validator;
         }
 
+        public string GetModulus11CheckDigitPaceno(string number)
+        {
+            return GetModulus11CheckDigitPaceno(number, 1, 9, false);
+        }
+
+        public string GetModulus11CheckDigitPaceno(string cadena, int numDig, int limMult, bool x10)
+        {
+            int mult, suma, i, n, dig;
+            if (!x10)
+                numDig = 1;
+
+            for (n = 1; n <= numDig; n++)
+            {
+                suma = 0;
+                mult = 2;
+
+                for (i = cadena.Length - 1; i >= 0; i--)
+                {
+                    var ss = cadena.Substring(i, 1);
+                    suma += (mult * int.Parse(ss));
+
+                    if (++mult > limMult)
+                        mult = 2;
+                }
+
+                if (x10)
+                    dig = ((suma * 10) % 11) % 10;
+                else
+                    dig = suma % 11;
+
+                if (dig == 10)
+                    cadena += "1";
+
+                if (dig == 11)
+                    cadena += "0";
+
+                if (dig < 10)
+                    cadena += dig.ToString();
+            }
+
+            return cadena.Substring(cadena.Length - 1, numDig);
+
+        }
+
         public string GetCUF(string nit, string date, string sucursal, byte modalidad, byte tipoEmision, byte tipoFactura, byte tipoDocumentoSector, string numeroFactura, string puntoVenta)
         {
             if (string.IsNullOrEmpty(sucursal))
@@ -240,7 +284,7 @@ namespace WinFormsApp1
                 + tipoDocumentoSector.ToString().PadLeft(2, '0')
                 + numeroFactura.PadLeft(10, '0')
                 + puntoVenta.PadLeft(4, '0');
-            x += GetModulus11CheckDigit(x);
+            x += GetModulus11CheckDigitPaceno(x);
             var bi = System.Numerics.BigInteger.Parse(x);
             return bi.ToString("X");
         }
@@ -265,7 +309,7 @@ namespace WinFormsApp1
             cadena += numeroFactura.ToString("D10");
             cadena += puntoVenta.ToString("D4");
 
-            cadena += GetModulus11CheckDigit(cadena);
+            cadena += GetModulus11CheckDigitPaceno(cadena);
 
             var cuf = System.Numerics.BigInteger.Parse(cadena);
             return cuf.ToString("X");

@@ -33,7 +33,7 @@ namespace WinFormsApp1
             this.SendButton = new System.Windows.Forms.Button();
             this.SignAndCompressButton = new System.Windows.Forms.Button();
             this.VerifySignatureButton = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
+            this.CompressButton = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.button7 = new System.Windows.Forms.Button();
@@ -118,15 +118,15 @@ namespace WinFormsApp1
             this.VerifySignatureButton.UseVisualStyleBackColor = true;
             this.VerifySignatureButton.Click += new System.EventHandler(this.VerifySignatureButton_Click);
             // 
-            // button6
+            // CompressButton
             // 
-            this.button6.Location = new System.Drawing.Point(578, 152);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 7;
-            this.button6.Text = "Compress";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.CompressButton.Location = new System.Drawing.Point(578, 152);
+            this.CompressButton.Name = "CompressButton";
+            this.CompressButton.Size = new System.Drawing.Size(75, 23);
+            this.CompressButton.TabIndex = 7;
+            this.CompressButton.Text = "Compress";
+            this.CompressButton.UseVisualStyleBackColor = true;
+            this.CompressButton.Click += new System.EventHandler(this.CompressButton_Click);
             // 
             // openFileDialog1
             // 
@@ -522,7 +522,7 @@ namespace WinFormsApp1
             this.Controls.Add(this.CanonicalizeXmlButton);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
-            this.Controls.Add(this.button6);
+            this.Controls.Add(this.CompressButton);
             this.Controls.Add(this.VerifySignatureButton);
             this.Controls.Add(this.SignAndCompressButton);
             this.Controls.Add(this.SendButton);
@@ -540,7 +540,7 @@ namespace WinFormsApp1
         private System.Windows.Forms.Button SendButton;
         private System.Windows.Forms.Button SignAndCompressButton;
         private System.Windows.Forms.Button VerifySignatureButton;
-        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button CompressButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Button button7;
