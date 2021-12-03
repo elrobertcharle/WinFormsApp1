@@ -13,28 +13,7 @@ using System.Xml;
 namespace WinFormsApp1
 {
     class Siat
-    {
-        //public void SignData(RSA rsa)
-        //{
-        //    var text = "Hola que bola";
-
-        //    byte[] signature;
-
-        //    using (rsa)       //OJOOOO
-        //    {
-        //        //var p = service.ExportParameters(true);
-        //        //var docx = XDocument.Parse(service.ToXmlString(true));
-
-        //        var bytes = System.Text.Encoding.UTF8.GetBytes(text);
-        //        var sha256 = SHA256.Create();
-        //        var hash = sha256.ComputeHash(bytes);
-
-        //        signature = rsa.SignHash(hash, System.Security.Cryptography.HashAlgorithmName.SHA256, System.Security.Cryptography.RSASignaturePadding.Pkcs1);
-        //    }
-
-
-        //}
-
+    {   
         /// <summary>
         /// 
         /// </summary>
@@ -65,21 +44,6 @@ namespace WinFormsApp1
             doc.DocumentElement.AppendChild(doc.ImportNode(xmlSigElement, true));
         }
 
-        //public bool VerifyXmlSig(string fileName, X509Certificate2 certificate)
-        //{
-        //    var doc = new XmlDocument();
-        //    doc.Load(fileName);
-        //    return VerifyXmlSig(doc, certificate);
-        //}
-
-        //public bool VerifyXmlSig(XmlDocument doc, X509Certificate2 certificate)
-        //{
-        //    var signedXml = new SignedXml(doc);
-        //    var sigNode = doc.GetElementsByTagName("Signature")[0];
-        //    signedXml.LoadXml((XmlElement)sigNode);
-        //    return signedXml.CheckSignature(certificate, true);
-        //}
-
         public bool VerifyXmlSig(XmlDocument doc)
         {
             var signedXml = new SignedXml(doc);
@@ -87,11 +51,6 @@ namespace WinFormsApp1
             signedXml.LoadXml((XmlElement)sigNode);
             return signedXml.CheckSignature();
         }
-
-        //public RSA GetRSAPrivateKeyFromFile(string fileName)
-        //{
-
-        //}
 
         public void CompressFile(string originalFileName, string compressedFileName)
         {
@@ -110,18 +69,10 @@ namespace WinFormsApp1
             return (MemoryStream)c.GetOutput(typeof(MemoryStream));
         }
 
-        public string ByteArrayToString(byte[] ba)
-        {
-            StringBuilder hex = new StringBuilder(ba.Length * 2);
-            foreach (byte b in ba)
-                hex.AppendFormat(" {0:x2}", b);
-            return hex.ToString();
-        }
-
         public static string ByteArrayToHexString(byte[] ba)
         {
             var hex = new StringBuilder(ba.Length * 2);
-            foreach (byte b in ba)
+            foreach (var b in ba)
                 hex.AppendFormat(" {0:x2}", b);
             return hex.ToString();
         }
@@ -139,24 +90,6 @@ namespace WinFormsApp1
 
                 bytes = System.Text.Encoding.UTF8.GetBytes(doc.DocumentElement.OuterXml);
                 fs.Write(bytes, 0, bytes.Length);
-            }
-        }
-
-        public static void RemoveBOM(string source)
-        {
-            var tempFileName = @"d:\del\temp";
-            using (var s = File.OpenRead(source))
-            {
-                using (var target = File.OpenWrite(tempFileName))
-                {
-                    byte[] buff = new byte[1024];
-                    s.Read(buff, 0, 3);
-                    target.Write(buff, 0, 3);
-                    s.Seek(43, SeekOrigin.Begin);
-                    int read;
-                    while ((read = s.Read(buff, 0, 1024)) > 0)
-                        target.Write(buff, 0, read);
-                }
             }
         }
 
