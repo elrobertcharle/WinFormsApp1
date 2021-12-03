@@ -85,7 +85,7 @@ namespace WinFormsApp1
                 var bytes = System.Text.Encoding.UTF8.GetBytes(bom);
                 fs.Write(bytes, 0, bytes.Length);
 
-                bytes = new byte[] { 0xA };
+                bytes = new byte[] { 0xA }; //Line breaks normalized (ver https://www.w3.org/TR/xml-c14n11/)
                 fs.Write(bytes, 0, bytes.Length);
 
                 bytes = System.Text.Encoding.UTF8.GetBytes(doc.DocumentElement.OuterXml);

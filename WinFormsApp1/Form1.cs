@@ -359,21 +359,16 @@ namespace WinFormsApp1
             var doc = new XmlDocument();
             doc.Load(xmlFileName);
 
-            using (var canonicalizedStream = siat.CanonicalizeXml2(doc))
-            {
-                doc = new XmlDocument();
-                doc.Load(canonicalizedStream);
+            siat.SingXml(doc, rsaPKCS8, certificate);
 
-                siat.SingXml(doc, rsaPKCS8, certificate);
+            Siat.SaveXml(doc, signedXmlFileName);
 
-                Siat.SaveXml(doc, signedXmlFileName);
+            var ok = siat.VerifyXmlSig(doc);
 
-                var ok = siat.VerifyXmlSig(doc);
+            siat.CompressFile(signedXmlFileName, compressedXmlFileName);
 
-                siat.CompressFile(signedXmlFileName, compressedXmlFileName);
+            MessageBox.Show(ok.ToString());
 
-                MessageBox.Show(ok.ToString());
-            }
         }
 
         public string ByteArrayToHexString(byte[] ba)
